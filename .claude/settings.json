@@ -18,6 +18,8 @@
     ],
     "allow": [
       "Bash(git *)",
+      "Bash(git push *)",
+      "Bash(git push)",
       "Bash(west *)",
       "Bash(cmake *)",
       "Bash(ninja *)",
