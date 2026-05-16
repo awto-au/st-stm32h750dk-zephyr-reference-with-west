@@ -6,12 +6,11 @@ Target board: **stm32h750b_dk** (ST Discovery Kit, STM32H750B-DK)
 
 | Step | Command | What it does |
 |------|---------|--------------|
-| 1 | `python3 -m venv .venv` | Creates an isolated Python environment in `.venv/` so `west` and Zephyr's Python deps don't pollute system Python. |
-| 2 | `source .venv/bin/activate` | Activates that venv for this shell. |
-| 3 | `pip install --upgrade pip west` | Installs **west**, Zephyr's meta-tool (multi-repo manager + build/flash front-end). |
-| 4 | `west init .` | Marks this folder as a west workspace. Creates `.west/config` pointing at `zephyr/west.yml` as the manifest. Clones the `zephyr` repo. |
-| 5 | `west update` | Reads `zephyr/west.yml` and clones every "module" project listed there (HALs for every vendor — STM32, NXP, Nordic, etc., plus mbedTLS, littlefs, CMSIS, hal_stm32 — the lot). This is the big download. |
-| 6 | `west zephyr-export` | Registers Zephyr's CMake package in `~/.cmake/packages/` so any out-of-tree CMake project can `find_package(Zephyr)` without hard-coded paths. |
+| 1 | `pip install --user west` | Installs **west** globally to `~/.local/bin/west` — available in all projects, no activation needed. Skip if already installed (`west --version`). |
+| 2 | `west init .` | Marks this folder as a west workspace. Creates `.west/config` pointing at `zephyr/west.yml` as the manifest. Clones the `zephyr` repo. |
+| 3 | `west update` | Reads `zephyr/west.yml` and clones every module (STM32/NXP/Nordic HALs, mbedTLS, littlefs, CMSIS, hal_stm32 — the lot). This is the big download. |
+| 4 | `west zephyr-export` | Registers Zephyr's CMake package in `~/.cmake/packages/` so any out-of-tree project can `find_package(Zephyr)` without hard-coded paths. |
+| 5 | `python3 -m venv .venv && source .venv/bin/activate && west packages pip --install` | One-time setup: installs Zephyr's Python build deps (pyelftools, cryptography, intelhex…) into a project venv. Only needed once per workspace. |
 
 ## Workspace layout now
 
@@ -107,32 +106,32 @@ Hello World! stm32h750b_dk
 
 ## Daily workflow cheat-sheet
 
+`west` is installed globally (`~/.local/bin/west`) — no venv activation needed.
+
 ```bash
 cd ~/git/awto-pod-33
-source .venv/bin/activate
 
 # Sync manifest (when zephyr/west.yml changes upstream)
 west update
 
 # Build
-west build -b stm32h750b_dk <path/to/app>
+west build -b stm32h750b_dk code
 
 # Rebuild same target
 west build
 
 # Flash & monitor
 west flash
-tio /dev/ttyACM0
----
+tio /dev/serial/by-id/usb-STMicroelectronics_STLINK-V3_003400223137510E33333639-if02
+```
 
 ## Board-specific notes: stm32h750b_dk
 
 - Full Zephyr support: LCD, audio, Ethernet, microSD, camera, USB OTG, and more.
-- Onboard ST-LINK/V2-1 for flashing and serial.
-- Use `west build -b stm32h750b_dk ...` for all Zephyr apps.
+- Onboard ST-LINK/V3 for flashing and serial (no external probe needed).
+- Use `west build -b stm32h750b_dk code` for all Zephyr apps.
 - Use `west flash` to program via ST-LINK.
-- Serial output is on `/dev/ttyACM0` (115200 baud).
-```
+- Serial console on USART3 via STLink VCP — use by-id path, 115200 baud.
 
 ## Troubleshooting
 
