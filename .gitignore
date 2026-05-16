@@ -1,0 +1,14 @@
+# West-managed — restored by `west update`
+zephyr/
+modules/
+tools/
+bootloader/
+
+# Build output
+build/
+
+# Python venv
+.venv/
+
+# West internal cache
+.west/cache/
