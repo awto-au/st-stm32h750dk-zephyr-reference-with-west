@@ -59,7 +59,16 @@ Example:
 
 ---
 
-## 5. The allow list covers
+## 5. Cross-repo read access
+
+The settings grant Claude Code read access to the entire `~/git` directory so
+it can reference other repos (headers, shared scripts, protocol files, etc.)
+without prompting. This is set via `permissions.additionalDirectories` in
+`.vscode/settings.example.json`. Adjust the path if your repos live elsewhere.
+
+---
+
+## 6. The allow list covers
 
 - `git *` — all git operations
 - `west *` — Zephyr build, flash, debug

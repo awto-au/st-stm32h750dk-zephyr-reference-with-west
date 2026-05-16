@@ -13,6 +13,9 @@
     ]
   },
   "permissions": {
+    "additionalDirectories": [
+      "~/git"
+    ],
     "allow": [
       "Bash(git *)",
       "Bash(west *)",
