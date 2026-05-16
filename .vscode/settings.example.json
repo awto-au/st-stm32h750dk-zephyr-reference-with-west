@@ -1,17 +1,4 @@
 {
-  "hooks": {
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "statusMessage": "Syncing permissions from .vscode/settings.example.json",
-            "command": "python3 -c \"import json; s=json.load(open('.claude/settings.json')); e=json.load(open('.vscode/settings.example.json')); s['permissions']=e['permissions']; json.dump(s,open('.claude/settings.json','w'),indent=2)\" 2>/dev/null || true"
-          }
-        ]
-      }
-    ]
-  },
   "permissions": {
     "allow": [
       "Bash(git *)",
